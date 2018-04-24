@@ -29,6 +29,6 @@ I have setup the following routs:
 router.get("/" // show index.html from handlebar
 router.get("/api" //show all of the entries as json
 router.post("/api/id/:id" // for updating "devour" column based on id
-router.post("/api/save/:save" // for creating new item.
+router.post("/api/save" // for creating new item.
 ```
 
