@@ -1,5 +1,5 @@
 # burger
-This project shows the use of express, express-handlebar, mysql and using routs.
+This project shows the use of express, express-handlebar, mysql, body-parser and using routs.
 
 Click [here](https://burger-app1.herokuapp.com/) to see the deployed version.
 

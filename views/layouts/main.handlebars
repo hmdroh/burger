@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
 
     <title>Burger shop</title>
     <style>
@@ -20,7 +21,8 @@
             width: 100%;
             background-color: white;
         }
-        #dList .burgerlist  {
+
+        #dList .burgerlist {
             padding: 5px;
             float: left;
             position: relative;
@@ -29,7 +31,7 @@
             border: 1px solid black;
             width: 100%;
             color: white;
-            background-color:gray;
+            background-color: gray;
         }
 
         .burgerlist div {
@@ -53,7 +55,10 @@
         //validation:
         var bname = $("#newburger").val().trim();
         if (bname !== "") {
-            insertData(bname, function (cb) {
+            var bdata = {
+                name: bname
+            };
+            insertData(bdata, function (cb) {
                 if (cb) {
                     $("#newburger").val("");
                     $("#newburger").focus();
@@ -64,30 +69,36 @@
         }
     });
 
-$("#nList").on("click",".btnDev",  function(){
-    var id = $(this).val();
-    updateDev(id, function(cb){
-        if(cb){
-        rePopulateAll();
-        }
+    $("#nList").on("click", ".btnDev", function () {
+        var id = $(this).val();
+        updateDev(id, function (cb) {
+            if (cb) {
+                rePopulateAll();
+            }
+        });
     });
-});
 
-function updateDev(id, cb){
-    $.post("/api/id/"+id).then(function(){
-        cb(true);
-    });
-}
+    function updateDev(id, cb) {
+        $.post("/api/id/" + id).then(function () {
+            cb(true);
+        });
+    }
 
-function insertData(bname, cb) {
-        $.post("/api/save/" + bname, function (data) {
+    function insertData(bname, cb) {
+        $.ajax({
+            url: "/api/save",
+            method: "POST",
+            data: bname
+        }).then(function (data) {
             if (data) {
                 cb(true);
             } else {
                 cb(true);
             }
         });
+
     }
+
     rePopulateAll();
     function rePopulateAll() {
         $.get("/api", function (err) {

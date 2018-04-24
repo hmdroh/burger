@@ -22,9 +22,9 @@ router.post("/api/id/:id", function (req, res) {
     });
 });
 
-router.post("/api/save/:save", function (req, res) {
+router.post("/api/save", function (req, res) {
     //create new
-    var save = req.params.save;
+    var save = req.body.name;
     burger.insertNew(save, function(data){
         res.json(data);
     });
