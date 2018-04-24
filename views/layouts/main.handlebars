@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous">
+    <title>Burger shop</title>
+    <style>
+        .burgerlist {
+            padding: 10px;
+            float: left;
+            position: relative;
+            clear: both;
+            margin: 10px;
+            border: 1px solid black;
+            width: 100%;
+            background-color: white;
+        }
+        #dList .burgerlist  {
+            padding: 5px;
+            float: left;
+            position: relative;
+            clear: both;
+            margin: 0px;
+            border: 1px solid black;
+            width: 100%;
+            color: white;
+            background-color:gray;
+        }
+
+        .burgerlist div {
+            float: left;
+            margin: 5px;
+        }
+
+        .burgerlist button {
+            float: left;
+            margin: 5px;
+        }
+    </style>
+
+</head>
+
+<body class="bg-warning">
+    {{{body}}}
+</body>
+<script>
+    $("#submitbtn").on("click", function () {
+        //validation:
+        var bname = $("#newburger").val().trim();
+        if (bname !== "") {
+            insertData(bname, function (cb) {
+                if (cb) {
+                    $("#newburger").val("");
+                    $("#newburger").focus();
+                    rePopulateAll();
+                }
+
+            });
+        }
+    });
+
+$("#nList").on("click",".btnDev",  function(){
+    var id = $(this).val();
+    updateDev(id, function(cb){
+        if(cb){
+        rePopulateAll();
+        }
+    });
+});
+
+function updateDev(id, cb){
+    $.post("/api/id/"+id).then(function(){
+        cb(true);
+    })
+}
+
+    function insertData(bname, cb) {
+        $.post("/api/save/" + bname, function (data) {
+            if (data) {
+                cb(true);
+            } else {
+                cb(true);
+            }
+        });
+    }
+    rePopulateAll();
+    function rePopulateAll() {
+        $.get("/api", function (err) {
+        }).then(function (data) {
+            $("#nList").empty();
+            $("#dList").empty();
+            var notd = 0;
+            var d = 0;
+            for (var i = 0; i < data.length; i++) {
+                var bname = data[i].burger_name;
+                var bdv = data[i].devoured;
+
+
+                if (!bdv) {
+                    notd++;
+                    var con = $("<div>");
+                    con.addClass("burgerlist");
+                    var nb = $("<div>");
+                    nb.html(notd + ". ");
+                    nb.append(bname);
+                    con.append(nb);
+
+                    var btn = $("<button>");
+                    btn.html("Devoure");
+                    btn.addClass("btnDev");
+                    btn.attr("value", data[i].id);
+                    con.append(btn);
+                    $("#nList").append(con);
+                } else {
+                    d++;
+                    var con = $("<div>");
+                    con.addClass("burgerlist");
+                    var nb = $("<div>");
+                    nb.html(d + ". ");
+                    nb.append(bname);
+                    con.append(nb);
+                    $("#dList").append(con);
+                }
+            }
+        });
+    }
+
+</script>
+
+</html>
